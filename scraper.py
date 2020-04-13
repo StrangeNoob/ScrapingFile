@@ -4,6 +4,9 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import date
 import time
+import schedule
+
+
 def spreadSheet():
     headers = {"User-Agent":'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
     page1 = requests.get("https://www.moneycontrol.com/indian-indices/nifty-50-9.html", headers=headers).text
@@ -64,7 +67,9 @@ def spreadSheet():
     niftyL4 = niftyClose - (((niftyHigh-niftyLow)*1.1)/2)   
     niftyL3 = niftyClose - (((niftyHigh-niftyLow)*1.1)/4)
     niftyRow = ["Nifty",niftyHigh,niftyClose,niftyLow,niftyR4,niftyR3,niftyR2,niftyR1,niftyTC,niftyPivot,niftyBC,niftyS1,niftyS2,niftyS3,niftyS4,niftyH4,niftyH3,niftyL3,niftyL4]
+    
     # assign Values of Pivot,BC,TC,R1,R2,R3,R4,S1,S2,S3,S4,H1,H2,H3,H4,L1,L2,L3,L4 of niftyBN
+
     niftyBNPivot = (niftyBNClose+niftyBNHigh+niftyBNLow)/3
     niftyBNBC = (niftyBNHigh+niftyBNLow)/3
     niftyBNTC = (niftyBNPivot-niftyBNBC)+niftyBNPivot
@@ -96,7 +101,3 @@ def spreadSheet():
             row = ['',Row1[i],niftyRow[i],niftyBNRow[i]]
         sheet.insert_row(row,i+1)
         print(i+1," is inserted to SpreadSheet")
-
-while (True):
-    spreadSheet()
-    time.sleep(24*60*60)
